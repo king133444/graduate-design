@@ -23,7 +23,7 @@ module.exports = {
 			jsx: true
 		}
 	},
-	plugins: ["react", "@typescript-eslint", "react-hooks", "prettier"],
+	plugins: ["react", "@typescript-eslint", "react-hooks"],
 	/* 继承某些已有的规则 */
 	extends: [
 		"eslint:recommended",
@@ -31,8 +31,6 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:react/jsx-runtime",
 		"plugin:react-hooks/recommended",
-		"prettier",
-		"plugin:prettier/recommended"
 	],
 	/*
 	 * "off" 或 0    ==>  关闭规则
@@ -41,6 +39,9 @@ module.exports = {
 	 */
 	rules: {
 		// eslint (http://eslint.cn/docs/rules)
+		'indent': 'off',  // 禁用缩进检查
+		'space-before-function-paren': 'off',  // 禁用函数名和括号之间的空格检查
+		'space-infix-ops': 'off',  // 禁用操作符周围的空格检查
 		"no-var": "error", // 要求使用 let 或 const 而不是 var
 		"no-multiple-empty-lines": ["error", { max: 1 }], // 不允许多个空行
 		"no-use-before-define": "off", // 禁止在 函数/类/变量 定义之前使用它们
