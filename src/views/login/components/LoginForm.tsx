@@ -1,31 +1,21 @@
-import md5 from "js-md5";
 import { useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd"; // 引入 Space 组件
 import { useNavigate } from "react-router-dom";
-import { Login } from "@/api/interface";
-import { loginApi } from "@/api/modules/login";
 import { HOME_URL } from "@/config/config";
-import { connect } from "react-redux";
-import { setToken } from "@/redux/modules/global/action";
-import { useTranslation } from "react-i18next";
-import { setTabsList } from "@/redux/modules/tabs/action";
 import { UserOutlined, LockOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
-const LoginForm = (props: any) => {
-	const { t } = useTranslation();
-	const { setToken, setTabsList } = props;
+const LoginForm = () => {
 	const navigate = useNavigate();
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState<boolean>(false);
 
 	// 登录
-	const onFinish = async (loginForm: Login.ReqLoginForm) => {
+	const onFinish = async () => {
 		try {
 			setLoading(true);
-			loginForm.password = md5(loginForm.password);
-			const { data } = await loginApi(loginForm);
-			setToken(data?.access_token);
-			setTabsList([]);
+			// loginForm.password = md5(loginForm.password);
+			// const { data } = await loginApi(loginForm);
+			// setToken(data?.access_token);
 			message.success("登录成功！");
 			navigate(HOME_URL);
 		} finally {
@@ -54,22 +44,32 @@ const LoginForm = (props: any) => {
 			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
 				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined />} />
 			</Form.Item>
-			<Form.Item className="login-btn">
-				<Button
-					onClick={() => {
-						form.resetFields();
-					}}
-					icon={<CloseCircleOutlined />}
-				>
-					{t("login.reset")}
-				</Button>
-				<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined />}>
-					{t("login.confirm")}
-				</Button>
+			<Form.Item >
+				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+					<Button
+						onClick={() => {
+							form.resetFields();
+						}}
+						icon={<CloseCircleOutlined />}
+					>
+						重置
+					</Button>
+					<Button
+						onClick={() => {
+							form.resetFields();
+						}}
+						icon={<CloseCircleOutlined />}
+					>
+						注册
+					</Button>
+					<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined />}>
+						登录
+					</Button>
+				</div>
+
 			</Form.Item>
 		</Form>
 	);
 };
 
-const mapDispatchToProps = { setToken, setTabsList };
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default LoginForm;
