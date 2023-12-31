@@ -1,6 +1,9 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { Navigate, useRoutes } from "react-router-dom";
 import Login from "@/views/login/index";
 import HomePage from "@/views/home/index"
+import AccountManage from "@/views/accountManage";
+import RoleManage from "@/views/roleManage";
 // import Dashboard from "@/views/dashboard/index";
 // import other components...
 
@@ -20,12 +23,30 @@ export const rootRouter: any = [
 	{
 		path: "/home",
 		element: <HomePage />,
+		children: [
+			{
+				path: "accountManagement",
+				element: <AccountManage />,
+				meta: {
+					title: "账户管理",
+					key: "accountManage"
+				}
+			},
+			{
+				path: "roleManagement",
+				element: <RoleManage />,
+				meta: {
+					title: "账户管理",
+					key: "accountManage"
+				}
+			},
+			// 添加其他子路由...
+		],
 		meta: {
-			title: "仪表盘",
-			key: "dashboard"
+			title: "主界面",
+			key: "homepage"
 		}
 	},
-	// other routes...
 ];
 
 const Router = () => {
