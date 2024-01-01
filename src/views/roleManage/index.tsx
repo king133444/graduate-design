@@ -1,6 +1,6 @@
 import { Breadcrumb, Table } from 'antd';
 
-const LoginPage = () => {
+const RoleManagement = () => {
     const dataSource = [
         {
             key: '1',
@@ -51,4 +51,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default RoleManagement;
