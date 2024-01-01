@@ -30,7 +30,7 @@ export default function getItems() {
       getItem('账号管理', 'menu2'),
       getItem('系统角色', 'menu3'),
     ]),
-    getItem('个人信息管理', 'menu10', <SolutionOutlined rev={undefined} />),
+    getItem('退出', 'menu4', <SolutionOutlined rev={undefined} />),
   ]
   return items;
 }

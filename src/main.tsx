@@ -1,10 +1,14 @@
-import ReactDOM from "react-dom";
-import App from "@/App";
-import { RecoilRoot } from "recoil";
+import ReactDOM from 'react-dom';
+import App from '@/App';
+import { RecoilRoot } from 'recoil';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN';
 
 ReactDOM.render(
 	<RecoilRoot>
-		<App />
+		<ConfigProvider locale={zhCN}>
+			<App />
+		</ConfigProvider>
 	</RecoilRoot>,
-	document.getElementById("root")
+	document.getElementById('root'),
 );

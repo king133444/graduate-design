@@ -2,7 +2,7 @@
 export const getRoutes = (key: string) => {
     switch (key) {
         case "menu1":
-            return "/personalInformationManagement"
+            return "/login"
         case "menu2":
             return "/home/accountManagement"
         case "menu3":

@@ -39,10 +39,10 @@ const LoginForm = () => {
 			autoComplete="off"
 		>
 			<Form.Item name="username" rules={[{ required: true, message: "请输入用户名" }]}>
-				<Input placeholder="用户名：admin / user" prefix={<UserOutlined />} />
+				<Input placeholder="用户名：admin / user" prefix={<UserOutlined rev={undefined} />} />
 			</Form.Item>
 			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
-				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined />} />
+				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined rev={undefined} />} />
 			</Form.Item>
 			<Form.Item >
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -50,7 +50,7 @@ const LoginForm = () => {
 						onClick={() => {
 							form.resetFields();
 						}}
-						icon={<CloseCircleOutlined />}
+						icon={<CloseCircleOutlined rev={undefined} />}
 					>
 						重置
 					</Button>
@@ -58,11 +58,11 @@ const LoginForm = () => {
 						onClick={() => {
 							form.resetFields();
 						}}
-						icon={<CloseCircleOutlined />}
+						icon={<CloseCircleOutlined rev={undefined} />}
 					>
 						注册
 					</Button>
-					<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined />}>
+					<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined rev={undefined} />}>
 						登录
 					</Button>
 				</div>

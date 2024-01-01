@@ -1,4 +1,4 @@
-import { Breadcrumb, Table } from 'antd';
+import { Table } from 'antd';
 
 const AccountManagement = () => {
     const dataSource = [
@@ -42,10 +42,7 @@ const AccountManagement = () => {
 
     return (
         <div>
-            <Breadcrumb>
-                <Breadcrumb.Item>主页面</Breadcrumb.Item>
-                <Breadcrumb.Item>账户管理</Breadcrumb.Item>
-            </Breadcrumb>
+
             <Table dataSource={dataSource} columns={columns} />
         </div>
     );
