@@ -7,6 +7,10 @@ export const getRoutes = (key: string) => {
             return "/home/accountManagement"
         case "menu3":
             return "/home/roleManagement"
+        case "menu4":
+            return "/"
+        case "menu5":
+            return "/home/mainPage"
         default:
             return '/'
     }
@@ -22,6 +26,8 @@ export const getMenuKeys = (route: string) => {
             return "menu2"
         case "roleManagement":
             return "menu3"
+        case "mainPage":
+            return "menu5"
         default:
             return '/'
     }

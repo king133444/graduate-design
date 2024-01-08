@@ -4,6 +4,7 @@ import Login from "@/views/login/index";
 import HomePage from "@/views/home/index"
 import AccountManage from "@/views/accountManage";
 import RoleManage from "@/views/roleManage";
+import MainPage from "@/views/home/mainPage";
 // import Dashboard from "@/views/dashboard/index";
 // import other components...
 
@@ -24,6 +25,14 @@ export const rootRouter: any = [
 		path: "/home",
 		element: <HomePage />,
 		children: [
+			{
+				path: "mainPage",
+				element: <MainPage />,
+				meta: {
+					title: "首页",
+					key: "mainPage"
+				}
+			},
 			{
 				path: "accountManagement",
 				element: <AccountManage />,

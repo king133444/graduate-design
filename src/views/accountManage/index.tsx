@@ -1,5 +1,5 @@
-import { Table } from 'antd';
-
+import { Breadcrumb, Table } from 'antd';
+import { HomeOutlined } from '@ant-design/icons'
 const AccountManagement = () => {
     const dataSource = [
         {
@@ -42,7 +42,28 @@ const AccountManagement = () => {
 
     return (
         <div>
+            <Breadcrumb
+                items={[
+                    {
+                        href: '#/home',
+                        title: (
+                            <>
+                                <HomeOutlined rev={undefined} />
+                                <span>主菜单</span>
+                            </>
+                        ),
+                    },
+                    {
+                        // href: '', // 或者设置为空字符串，保持当前页面
+                        title: (
+                            <>
 
+                                <span>账号管理</span>
+                            </>
+                        ),
+                    },
+                ]}
+            />
             <Table dataSource={dataSource} columns={columns} />
         </div>
     );

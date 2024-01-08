@@ -1,6 +1,6 @@
 import LoginForm from "./components/LoginForm";
 import loginLeft from "@/assets/images/login_left.png";
-import logo from "@/assets/images/logo.png";
+import logo from '@/assets/images/siderlogo.png';
 import "./index.less";
 
 const Login = () => {

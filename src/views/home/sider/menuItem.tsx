@@ -1,6 +1,7 @@
 import {
   SettingOutlined,
   SolutionOutlined,
+  DashboardOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import React from 'react';
@@ -26,6 +27,7 @@ function getItem(
 export default function getItems() {
 
   const items = [
+    getItem('首页', 'menu5', <DashboardOutlined rev={undefined} />),
     getItem('权限管理', 'menu1', <SettingOutlined rev={undefined} />, [
       getItem('账号管理', 'menu2'),
       getItem('系统角色', 'menu3'),
