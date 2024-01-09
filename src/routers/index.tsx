@@ -26,7 +26,7 @@ export const rootRouter: any = [
 		element: <HomePage />,
 		children: [
 			{
-				path: "mainPage",
+				path: "",
 				element: <MainPage />,
 				meta: {
 					title: "首页",

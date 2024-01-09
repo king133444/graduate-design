@@ -64,6 +64,7 @@ const AccountManagement = () => {
                     },
                 ]}
             />
+            <br />
             <Table dataSource={dataSource} columns={columns} />
         </div>
     );
