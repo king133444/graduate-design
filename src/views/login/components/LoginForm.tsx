@@ -2,74 +2,123 @@ import { useState } from "react";
 import { Button, Form, Input, message } from "antd"; // 引入 Space 组件
 import { useNavigate } from "react-router-dom";
 import { HOME_URL } from "@/config/config";
-import { UserOutlined, LockOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, CloseCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import api from "@/api";
 
 const LoginForm = () => {
-	const navigate = useNavigate();
-	const [form] = Form.useForm();
-	const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [register, setRegister] = useState(false);
 
-	// 登录
-	const onFinish = async () => {
-		try {
-			setLoading(true);
-			// loginForm.password = md5(loginForm.password);
-			// const { data } = await loginApi(loginForm);
-			// setToken(data?.access_token);
-			message.success("登录成功！");
-			navigate(HOME_URL);
-		} finally {
-			setLoading(false);
-		}
-	};
+  // 登录
+  const handleSubmit = async () => {
+    const { username, password, confirm } = form.getFieldsValue();
+    if (register) {
+      if (password !== confirm) {
+        form.setFields([
+          {
+            name: 'confirm',
+            errors: ['密码和确认密码不一致'],
+          },
+        ]);
+        return;
+      }
+      try {
+        setLoading(true);
+        const { success }: any = await api.Signup({
+          name: username,
+          password,
+        })
+        if (success) {
+          message.success("注册成功！");
+          navigate(HOME_URL);
+        } else {
+          message.error('服务器内部错误')
+        }
+      } catch (error) {
+        message.error('获取失败')
+      } finally {
+        setLoading(false);
+      }
+    }
+    try {
+      setLoading(true);
+      const { data: { success } }: any = await api.Login({
+        name: username,
+        password
+      })
+      if (success) {
+        message.success("登录成功！");
+        navigate(HOME_URL);
+      } else {
+        message.error('服务器内部错误')
+      }
+    } catch (error) {
+      message.error('获取失败');
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <Form
+      form={form}
+      name="basic"
+      labelCol={{ span: 5 }}
+      initialValues={{ remember: true }}
+      onFinish={handleSubmit}
+      size="large"
+      autoComplete="off"
+    >
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: '请输入用户名' }]}
+      >
+        <Input placeholder="请输入用户名" prefix={<UserOutlined rev={undefined} />} />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: '请输入密码' }]}
+      >
+        <Input.Password autoComplete="new-password" placeholder="请输入密码" prefix={<LockOutlined rev={undefined} />} />
+      </Form.Item>
+      {register && (
+        <Form.Item
+          name="confirm"
+          rules={[{ required: true, message: '请确认密码' }]}
+        >
+          <Input.Password autoComplete="new-password" placeholder="输入确认密码" prefix={<LockOutlined rev={undefined} />} />
+        </Form.Item>
+      )}
+      <Form.Item>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            onClick={() => {
+              form.resetFields();
+            }}
+            icon={<CloseCircleOutlined rev={undefined} />}
+          >
 
-	const onFinishFailed = (errorInfo: any) => {
-		console.log("Failed:", errorInfo);
-	};
+            重置
+          </Button>
+          <Button
+            onClick={() => {
+              setRegister(!register);
+              form.resetFields();
+            }}
+            icon={<UserAddOutlined rev={undefined} />}
+          >
+            {register ? '取消注册' : '注册'}
+          </Button>
+          <Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined rev={undefined} />}>
+            {register ? '提交注册' : '登录'}
+          </Button>
+        </div>
+      </Form.Item>
+    </Form>
+  );
 
-	return (
-		<Form
-			form={form}
-			name="basic"
-			labelCol={{ span: 5 }}
-			initialValues={{ remember: true }}
-			onFinish={onFinish}
-			onFinishFailed={onFinishFailed}
-			size="large"
-			autoComplete="off"
-		>
-			<Form.Item name="username" rules={[{ required: true, message: "请输入用户名" }]}>
-				<Input placeholder="用户名：admin / user" prefix={<UserOutlined rev={undefined} />} />
-			</Form.Item>
-			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
-				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined rev={undefined} />} />
-			</Form.Item>
-			<Form.Item >
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<Button
-						onClick={() => {
-							form.resetFields();
-						}}
-						icon={<CloseCircleOutlined rev={undefined} />}
-					>
-						重置
-					</Button>
-					<Button
-						onClick={() => {
-							form.resetFields();
-						}}
-						icon={<CloseCircleOutlined rev={undefined} />}
-					>
-						注册
-					</Button>
-					<Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined rev={undefined} />}>
-						登录
-					</Button>
-				</div>
-
-			</Form.Item>
-		</Form>
-	);
 };
 
 export default LoginForm;
