@@ -26,13 +26,14 @@ const LoginForm = () => {
       }
       try {
         setLoading(true);
-        const { success }: any = await api.Signup({
+        const result: any = await api.Signup({
           name: username,
           password,
         })
+        const { success } = result
         if (success) {
           message.success("注册成功！");
-          navigate(HOME_URL);
+          navigate('/login');
         } else {
           message.error('服务器内部错误')
         }
@@ -42,23 +43,34 @@ const LoginForm = () => {
         setLoading(false);
       }
     }
-    try {
-      setLoading(true);
-      const { data: { success } }: any = await api.Login({
-        name: username,
-        password
-      })
-      if (success) {
-        message.success("登录成功！");
-        navigate(HOME_URL);
-      } else {
-        message.error('服务器内部错误')
+    else {
+      try {
+        setLoading(true);
+        const result: any = await api.Login({
+          name: username,
+          password
+        })
+
+        const { success, data, message: info } = result
+        console.log('data', data);
+
+        if (success) {
+          const { accessToken, refreshToken } = data.tokens;
+          console.log(accessToken, refreshToken) // 添加这一行
+          sessionStorage.setItem('access_token', accessToken)
+          sessionStorage.setItem('refresh_token', refreshToken)
+          message.success("登录成功！");
+          navigate(HOME_URL);
+        } else {
+          message.error(info)
+        }
+      } catch (error: any) {
+        console.log(error);
+        message.error(error.response.data.message)
       }
-    } catch (error) {
-      message.error('获取失败');
-    }
-    finally {
-      setLoading(false);
+      finally {
+        setLoading(false);
+      }
     }
   };
   return (

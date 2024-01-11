@@ -6,15 +6,19 @@ export default {
 	 */
 	// 登录
 	Login: (params: any) => {
-		return fetchPost('/users/login', params);
+		return fetchPost('/auth/login', params);
 	},
 	// 注册
 	Signup: (params: any) => {
-		return fetchPost('/users/register', params);
+		return fetchPost('/auth/register', params);
 	},
 	// 获取当前用户
 	User: (params: any) => {
-		return fetchPost('/users/user', params);
+		return fetchPost('/auth/user', params);
+	},
+	//刷新令牌
+	RefreshToken: (params: any) => {
+		return fetchPost('/auth/refreshToken', params)
 	},
 
 	/**

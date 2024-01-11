@@ -1,5 +1,4 @@
 import { Avatar, Button, Modal, Popover } from 'antd'
-import HeaderLogo from '@/assets/images/logo.png'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { Header } from 'antd/es/layout/layout';
@@ -26,7 +25,6 @@ export default function LayoutHeader() {
         paddingTop: '10px',
         paddingLeft: '20px',
         paddingRight: '20px',
-        backgroundImage: `url(${HeaderLogo})`,
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         backgroundColor: '#FFFFFF'

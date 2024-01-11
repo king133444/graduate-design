@@ -12,6 +12,7 @@ import { getRoutes } from './sider/getRoutes';
 import './index.less'
 import siderLogo from '@/assets/images/siderlogo.png';
 import LayoutHeader from './header';
+import RefreshToken from '../token';
 
 const { Sider, Content } = Layout;
 const Home: React.FC = () => {
@@ -36,6 +37,7 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <RefreshToken />
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed} style={{ background: colorBgContainer }}>
           <div className="logo-container" style={{
@@ -43,6 +45,7 @@ const Home: React.FC = () => {
             justifyContent: 'center', padding: '30px 0px'
           }}>
             <img src={siderLogo} style={{ width: '50px', height: '50px' }} />
+            <div>游乐园管理系统</div>
           </div>
           <Switch onChange={changeMode} /> 模式切换
           <br />

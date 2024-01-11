@@ -12,6 +12,8 @@ const ReqInstance = axios.create({
 ReqInstance.interceptors.request.use((config) => {
   const access_token = sessionStorage.getItem('access_token')
   if (access_token) {
+    config.headers = config.headers || {};
+    config.headers.common = config.headers.common || {};
     config.headers.common['Authorization'] = `Bearer ${access_token}`
   }
   return config
@@ -32,7 +34,7 @@ ReqInstance.interceptors.response.use(config => {
   return config
 }, error => {
   const response = error.response
-  const status_code = response.data.statusCode
+  const status_code = response && response.data ? response.data.statusCode : 500;
   if (status_code === 401) {
     console.error('会话过期,请重新登录')
     window.location.href = '/login'
