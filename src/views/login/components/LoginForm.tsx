@@ -56,9 +56,12 @@ const LoginForm = () => {
 
         if (success) {
           const { accessToken, refreshToken } = data.tokens;
+          const { name, id } = data.user
           console.log(accessToken, refreshToken) // 添加这一行
           sessionStorage.setItem('access_token', accessToken)
           sessionStorage.setItem('refresh_token', refreshToken)
+          sessionStorage.setItem('username', name)
+          sessionStorage.setItem('id', id)
           message.success("登录成功！");
           navigate(HOME_URL);
         } else {

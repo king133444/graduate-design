@@ -1,41 +1,62 @@
-import { Breadcrumb, Table } from 'antd';
-import { HomeOutlined } from '@ant-design/icons'
-const AccountManagement = () => {
-    const dataSource = [
-        {
-            key: '1',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            role: 'Admin',
-        },
-        {
-            key: '2',
-            name: 'Jane Doe',
-            email: 'jane.doe@example.com',
-            role: 'User',
-        },
-        {
-            key: '3',
-            name: 'Jim Doe',
-            email: 'jim.doe@example.com',
-            role: 'User',
-        },
-    ];
+import React, { useState, useEffect } from 'react';
+import { Breadcrumb, Table, message } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
+import api from '../../api/index';
+import { ColumnsType } from 'antd/es/table';
 
-    const columns = [
+const AccountManagement = () => {
+    const [data, setData] = useState([]);
+    const [tableLoading, setTableLoading] = useState(false);
+
+    useEffect(() => {
+        setTableLoading(true);
+        const getUsers = async () => {
+            try {
+                const result: any = await api.GetUsers({});
+                console.log(result);
+
+                const { success, data, message: info } = result
+                if (success) {
+                    setData(data.users);
+                } else {
+                    message.error(info)
+                }
+            } catch (error) {
+                message.error('获取失败')
+            } finally {
+                setTableLoading(false);
+            }
+        };
+
+        getUsers();
+    }, []); // 空数组确保 useEffect 仅在组件挂载时执行
+
+    const columns: ColumnsType<any> = [
         {
-            title: 'Name',
+            title: '序号',
+            dataIndex: 'id',
+            align: 'center',
+            key: 'id',
+            render: (_text, record, index) => {
+                if (record) return index + 1;
+            },
+        },
+        {
+            title: '姓名',
             dataIndex: 'name',
+            align: 'center',
             key: 'name',
         },
         {
-            title: 'Email',
+            title: '邮箱',
             dataIndex: 'email',
+            align: 'center',
             key: 'email',
         },
         {
-            title: 'Role',
+            title: '角色',
             dataIndex: 'role',
+            align: 'center',
             key: 'role',
         },
     ];
@@ -54,10 +75,8 @@ const AccountManagement = () => {
                         ),
                     },
                     {
-                        // href: '', // 或者设置为空字符串，保持当前页面
                         title: (
                             <>
-
                                 <span>账号管理</span>
                             </>
                         ),
@@ -65,7 +84,12 @@ const AccountManagement = () => {
                 ]}
             />
             <br />
-            <Table dataSource={dataSource} columns={columns} />
+            <Table
+                rowKey="id"
+                dataSource={data}
+                columns={columns}
+                loading={tableLoading}
+            />
         </div>
     );
 };

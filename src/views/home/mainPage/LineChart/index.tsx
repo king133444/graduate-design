@@ -19,7 +19,8 @@ const LineChart = () => {
         series: [{
             data: [120, 200, 150, 80, 70, 110, 130, 150, 200, 240, 200, 220], // Sample data
             type: 'line'
-        }]
+        }],
+        grid: { left: '50%' }
     };
 
     return (<ReactECharts option={option} />)

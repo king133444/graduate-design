@@ -14,13 +14,15 @@ import siderLogo from '@/assets/images/siderlogo.png';
 import LayoutHeader from './header';
 import RefreshToken from '../token';
 
-const { Sider, Content } = Layout;
+const { Sider, Content, Footer } = Layout;
 const Home: React.FC = () => {
   const navigate = useNavigate()
   const items = getItems();
   const [selectKey, setSelectKey] = useState<string>()
   const [collapsed, setCollapsed] = useState(false);
-  const [mode, setMode] = useState<'vertical' | 'inline'>('inline');
+  const [globaltheme, setGlobalTheme] = useState<'light' | 'dark'>('light');
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -29,44 +31,57 @@ const Home: React.FC = () => {
     if (selectKey) {
       navigate(getRoutes(selectKey));
     }
-  }, [selectKey])
+    setIsDarkTheme(globaltheme === 'dark');
+  }, [selectKey, globaltheme])
 
-  const changeMode = (value: boolean) => {
-    setMode(value ? 'vertical' : 'inline');
+  const changeTheme = (value: boolean) => {
+    setGlobalTheme(value ? 'dark' : 'light');
   };
 
   return (
     <>
       <RefreshToken />
       <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed} style={{ background: colorBgContainer }}>
-          <div className="logo-container" style={{
-            display: 'flex', alignItems: 'center',
-            justifyContent: 'center', padding: '30px 0px'
-          }}>
+        <Sider
+          theme={globaltheme}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+        // style={{ background: colorBgContainer }}
+        >
+          <div className="logo-container"
+            style={{
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'center', padding: '30px 0px'
+            }}>
             <img src={siderLogo} style={{ width: '50px', height: '50px' }} />
-            <div>游乐园管理系统</div>
+            {!collapsed && (<div>游乐园管理系统</div>)}
           </div>
-          <Switch onChange={changeMode} /> 模式切换
+          <div
+            style={{ margin: '-1vw 1.8vw' }}
+          >
+            <Switch onChange={changeTheme} /> {!collapsed && (<>模式切换</>)}
+          </div>
           <br />
           <br />
           <Menu
-            theme='light'
-            mode={mode}
+            theme={globaltheme}
+            mode='inline'
             onSelect={({ key }) => {
               setSelectKey(key);
             }}
             defaultSelectedKeys={['1']}
             items={items} />
           <Button
-            type="text"
+            type={isDarkTheme ? 'primary' : 'text'}
             icon={collapsed ? <MenuUnfoldOutlined rev={undefined} /> : <MenuFoldOutlined rev={undefined} />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: '16px',
               width: 64,
               height: 64,
-            }} />
+            }}
+          />
         </Sider>
         <Layout>
           <LayoutHeader />
@@ -81,6 +96,9 @@ const Home: React.FC = () => {
           >
             <Outlet />
           </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            Graduation Design ©{new Date().getFullYear()} Created by Cheng xinxin
+          </Footer>
         </Layout>
 
       </Layout>
