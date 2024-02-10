@@ -10,10 +10,17 @@ const LoginForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [register, setRegister] = useState(false);
+  // 分页参数
+  //  const [pagination, setPagination] = useState<TablePaginationConfig>({
+  //   current: 1,
+  //   pageSize: 10,
+  // });
 
   // 登录
   const handleSubmit = async () => {
     const { username, password, confirm } = form.getFieldsValue();
+    console.log('form love xinxin', [form]);
+
     if (register) {
       if (password !== confirm) {
         form.setFields([
@@ -30,12 +37,14 @@ const LoginForm = () => {
           name: username,
           password,
         })
-        const { success } = result
+        const { success } = result;
+        console.log(result);
+
         if (success) {
           message.success("注册成功！");
           navigate('/login');
         } else {
-          message.error('服务器内部错误')
+          message.error('注册失败')
         }
       } catch (error) {
         message.error('获取失败')
