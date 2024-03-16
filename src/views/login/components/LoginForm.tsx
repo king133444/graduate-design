@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Form, Input, message } from "antd"; // 引入 Space 组件
 import { useNavigate } from "react-router-dom";
 import { HOME_URL } from "@/config/config";
-import { UserOutlined, LockOutlined, CloseCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
 import api from "@/api";
 
 const LoginForm = () => {
@@ -88,57 +88,67 @@ const LoginForm = () => {
   return (
     <Form
       form={form}
+      layout="vertical"
       name="basic"
-      labelCol={{ span: 5 }}
+      labelCol={{ span: 8 }}
       initialValues={{ remember: true }}
       onFinish={handleSubmit}
       size="large"
-      autoComplete="off"
+      autoComplete="on"
+      requiredMark={false}
+      colon={false}
     >
+      <div style={{ fontSize: '20px', fontWeight: 'bold', marginTop: '-10px' }}>
+        {register ? '注册' : '登录'}
+      </div>
       <Form.Item
+        label="用户名"
         name="username"
         rules={[{ required: true, message: '请输入用户名' }]}
+        style={{ marginBottom: '10px' }}
       >
         <Input placeholder="请输入用户名" prefix={<UserOutlined rev={undefined} />} />
       </Form.Item>
       <Form.Item
+        label="密码"
         name="password"
         rules={[{ required: true, message: '请输入密码' }]}
+        style={{ marginBottom: '10px' }}
       >
         <Input.Password autoComplete="new-password" placeholder="请输入密码" prefix={<LockOutlined rev={undefined} />} />
       </Form.Item>
       {register && (
         <Form.Item
           name="confirm"
+          label="确认密码"
           rules={[{ required: true, message: '请确认密码' }]}
+          style={{ marginBottom: '10px' }}
         >
           <Input.Password autoComplete="new-password" placeholder="输入确认密码" prefix={<LockOutlined rev={undefined} />} />
         </Form.Item>
       )}
       <Form.Item>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            onClick={() => {
-              form.resetFields();
-            }}
-            icon={<CloseCircleOutlined rev={undefined} />}
-          >
-
-            重置
-          </Button>
-          <Button
-            onClick={() => {
-              setRegister(!register);
-              form.resetFields();
-            }}
-            icon={<UserAddOutlined rev={undefined} />}
-          >
-            {register ? '取消注册' : '注册'}
-          </Button>
-          <Button type="primary" htmlType="submit" loading={loading} icon={<UserOutlined rev={undefined} />}>
-            {register ? '提交注册' : '登录'}
-          </Button>
-        </div>
+        <br />
+        <Button
+          onClick={() => {
+            setRegister(!register);
+            form.resetFields();
+          }}
+          style={{ width: '16vw', marginTop: '2vh' }}
+          icon={<UserAddOutlined rev={undefined} />}
+        >
+          {register ? '取消注册' : '注册'}
+        </Button>
+        <br />
+        <Button
+          htmlType="submit"
+          loading={loading}
+          icon={<UserOutlined rev={undefined} />
+          }
+          style={{ width: '16vw', marginTop: '2vh' }}
+        >
+          {register ? '提交注册' : '登录'}
+        </Button>
       </Form.Item>
     </Form>
   );

@@ -10,7 +10,7 @@ import getItems from './sider/menuItem';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { getRoutes } from './sider/getRoutes';
 import './index.less'
-import siderLogo from '@/assets/images/siderlogo.png';
+import siderLogo from '@/assets/images/logo_name.svg';
 import LayoutHeader from './header';
 import RefreshToken from '../token';
 
@@ -52,10 +52,9 @@ const Home: React.FC = () => {
           <div className="logo-container"
             style={{
               display: 'flex', alignItems: 'center',
-              justifyContent: 'center', padding: '30px 0px'
+              justifyContent: 'top', padding: '10px 0px'
             }}>
-            <img src={siderLogo} style={{ width: '50px', height: '50px' }} />
-            {!collapsed && (<div>游乐园管理系统</div>)}
+            <img src={siderLogo} style={{ width: '300px', marginTop: '-40px' }} />
           </div>
           <div
             style={{ margin: '-1vw 1.8vw' }}
