@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Button, Form, Input, message } from "antd"; // 引入 Space 组件
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { HOME_URL } from "@/config/config";
 import { UserOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
 import api from "@/api";
 
+interface LocationState {
+  from?: string;
+}
+
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [register, setRegister] = useState(false);
@@ -72,6 +77,15 @@ const LoginForm = () => {
           sessionStorage.setItem('username', name)
           sessionStorage.setItem('id', id)
           message.success("登录成功！");
+          // 检查路由状态中是否有 'from' 属性
+          const state = location.state as LocationState;
+          if (state?.from) {
+            // 如果有，跳转回用户试图访问的页面
+            navigate(state.from);
+          } else {
+            // 如果没有，跳转到默认页面，例如首页
+            navigate('/home');
+          }
           navigate(HOME_URL);
         } else {
           message.error(info)

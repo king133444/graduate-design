@@ -13,7 +13,12 @@ export default function LayoutHeader() {
   const handlePasswordClick = () => {
     setIsPasswordModalVisible(true);
   };
-
+  const logout = () => {
+    sessionStorage.setItem('access_token', '')
+    sessionStorage.setItem('refresh_token', '')
+    sessionStorage.setItem('selectKey', '')
+    navigate('/login')
+  }
   return (
     <>
       <Header
@@ -68,7 +73,7 @@ export default function LayoutHeader() {
                   </Col>
                   <Col span={12}>
                     <Button
-                      onClick={() => { navigate('/login') }}>
+                      onClick={() => { logout() }}>
                       退出登录
                     </Button>
                   </Col>
