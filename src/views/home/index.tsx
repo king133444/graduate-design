@@ -13,7 +13,7 @@ import './index.less'
 import siderLogo from '@/assets/images/logo_name.svg';
 import LayoutHeader from './header';
 import RefreshToken from '../token';
-
+import { getMenuKeys } from './sider/getRoutes'
 const { Sider, Content, Footer } = Layout;
 const Home: React.FC = () => {
   const navigate = useNavigate()
@@ -33,7 +33,11 @@ const Home: React.FC = () => {
     }
     setIsDarkTheme(globaltheme === 'dark');
   }, [selectKey, globaltheme])
+  const [defaultSelectKey, setDefaultSelectKey] = useState<string>('')
 
+  useEffect(() => {
+    setDefaultSelectKey(getMenuKeys(location.pathname))
+  }, [getMenuKeys(location.pathname)])
   const changeTheme = (value: boolean) => {
     setGlobalTheme(value ? 'dark' : 'light');
   };
@@ -69,7 +73,7 @@ const Home: React.FC = () => {
             onSelect={({ key }) => {
               setSelectKey(key);
             }}
-            defaultSelectedKeys={['1']}
+            selectedKeys={[defaultSelectKey]}
             items={items} />
           <Button
             type={isDarkTheme ? 'primary' : 'text'}

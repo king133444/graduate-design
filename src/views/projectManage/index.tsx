@@ -55,15 +55,15 @@ const ProjectManage = () => {
     };
 
     const columns = [
-        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: '项目名', dataIndex: 'name', key: 'name' },
         {
-            title: 'Action',
+            title: '操作',
             dataIndex: '',
             key: 'x',
             render: (_: any, record: { id: any; }) => (
                 <>
-                    <Button onClick={() => handleEdit(record.id)}>Edit</Button>
-                    <Button onClick={() => handleDelete(record.id)}>Delete</Button>
+                    <Button onClick={() => handleEdit(record.id)}>编辑</Button>
+                    <Button onClick={() => handleDelete(record.id)}>删除</Button>
                 </>
             ),
         },
@@ -72,19 +72,21 @@ const ProjectManage = () => {
     return (
         <>
             <Button type="primary" icon={<PlusOutlined rev={undefined} />} onClick={handleAdd}>
-                Add Project
+                新增
             </Button>
+            <br />
+            <br />
             <Table columns={columns} dataSource={projects} rowKey="id" />
             <Modal
-                title="Add/Edit Project"
-                visible={isModalVisible}
+                title="编辑"
+                open={isModalVisible}
                 onOk={handleOk}
                 onCancel={() => setIsModalVisible(false)}
             >
                 <Form form={form} layout="vertical" name="form_in_modal">
                     <Form.Item
                         name="name"
-                        label="Project Name"
+                        label="项目名"
                         rules={[{ required: true, message: 'Please input the project name!' }]}
                     >
                         <Input />

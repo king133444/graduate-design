@@ -19,6 +19,8 @@ export const getRoutes = (key: string) => {
             return "/home/facilityManage"
         case "menu9":
             return "/home/commentManage"
+        case "menu10":
+            return "/home/visitorManage"
         default:
             return '/'
     }
@@ -44,6 +46,8 @@ export const getMenuKeys = (route: string) => {
             return "menu8"
         case "/home/commentManage":
             return "menu9"
+        case "/home/visitorManage":
+            return "menu10"
         default:
             return '/'
     }

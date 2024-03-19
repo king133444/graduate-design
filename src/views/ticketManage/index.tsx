@@ -11,32 +11,32 @@ const TicketManage = () => {
     const [tickets, setTickets] = useState(initialTickets);
 
     const handleReserve = (id: number) => {
-        setTickets(tickets.map((t) => t.id === id ? { ...t, status: 'Reserved' } : t));
+        setTickets(tickets.map((t) => t.id === id ? { ...t, status: '预定' } : t));
         notification.success({ message: 'Ticket reserved successfully!' });
     };
 
     const handleSale = (id: number) => {
-        setTickets(tickets.map((t) => t.id === id ? { ...t, status: 'Sold' } : t));
+        setTickets(tickets.map((t) => t.id === id ? { ...t, status: '售出' } : t));
         notification.success({ message: 'Ticket sold successfully!' });
     };
 
     const handleRefund = (id: number) => {
-        setTickets(tickets.map((t) => t.id === id ? { ...t, status: 'Available' } : t));
+        setTickets(tickets.map((t) => t.id === id ? { ...t, status: '有票' } : t));
         notification.success({ message: 'Ticket refunded successfully!' });
     };
 
     const columns = [
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
+        { title: '票种', dataIndex: 'name', key: 'name' },
+        { title: '状态', dataIndex: 'status', key: 'status' },
         {
             title: 'Action',
             dataIndex: '',
             key: 'x',
             render: (_: any, record: { id: any; }) => (
                 <>
-                    <Button onClick={() => handleReserve(record.id)}>Reserve</Button>
-                    <Button onClick={() => handleSale(record.id)}>Sell</Button>
-                    <Button onClick={() => handleRefund(record.id)}>Refund</Button>
+                    <Button onClick={() => handleReserve(record.id)}>预定</Button>
+                    <Button onClick={() => handleSale(record.id)}>售出</Button>
+                    <Button onClick={() => handleRefund(record.id)}>退票</Button>
                 </>
             ),
         },

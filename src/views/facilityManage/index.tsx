@@ -11,26 +11,26 @@ const FacilityManage = () => {
     const [equipments, setEquipments] = useState(initialEquipments);
 
     const handlePurchase = (id: number) => {
-        setEquipments(equipments.map((e) => e.id === id ? { ...e, status: 'Purchased' } : e));
+        setEquipments(equipments.map((e) => e.id === id ? { ...e, status: '购买' } : e));
         notification.success({ message: 'Equipment purchased successfully!' });
     };
 
     const handleRepair = (id: number) => {
-        setEquipments(equipments.map((e) => e.id === id ? { ...e, status: 'Under Repair' } : e));
+        setEquipments(equipments.map((e) => e.id === id ? { ...e, status: '维修中' } : e));
         notification.success({ message: 'Equipment sent for repair successfully!' });
     };
 
     const columns = [
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
+        { title: '设备名', dataIndex: 'name', key: 'name' },
+        { title: '状态', dataIndex: 'status', key: 'status' },
         {
-            title: 'Action',
+            title: '操作',
             dataIndex: '',
             key: 'x',
             render: (_: any, record: { id: any; }) => (
                 <>
-                    <Button onClick={() => handlePurchase(record.id)}>Purchase</Button>
-                    <Button onClick={() => handleRepair(record.id)}>Repair</Button>
+                    <Button onClick={() => handlePurchase(record.id)}>购买</Button>
+                    <Button onClick={() => handleRepair(record.id)}>维修</Button>
                 </>
             ),
         },

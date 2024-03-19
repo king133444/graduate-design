@@ -16,15 +16,15 @@ const CommentManage = () => {
   };
 
   const columns = [
-    { title: 'User', dataIndex: 'user', key: 'user' },
-    { title: 'Comment', dataIndex: 'comment', key: 'comment' },
-    { title: 'Date', dataIndex: 'date', key: 'date' },
+    { title: '用户', dataIndex: 'user', key: 'user' },
+    { title: '评论', dataIndex: 'comment', key: 'comment' },
+    { title: '日期', dataIndex: 'date', key: 'date' },
     {
-      title: 'Action',
+      title: '操作',
       dataIndex: '',
       key: 'x',
       render: (_: any, record: { id: any; }) => (
-        <Button onClick={() => handleDelete(record.id)}>Delete</Button>
+        <Button onClick={() => handleDelete(record.id)}>删除</Button>
       ),
     },
   ];

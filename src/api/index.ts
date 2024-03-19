@@ -20,17 +20,16 @@ export default {
 	RefreshToken: (params: any) => {
 		return fetchPost('/auth/refreshToken', params)
 	},
-
+	// 修改密码
+	UpdatePassword: (params: any) => {
+		return fetchPost('/auth/changePassword', params);
+	},
 	/**
 	 * 用户相关接口
 	 */
 	// 修改我的用户信息
 	updateMyUser: (params: any) => {
 		return fetchPost('/users/updateMyUser', params);
-	},
-	// 修改密码
-	UpdatePassword: (params: any) => {
-		return fetchPost('/users/changePassword', params);
 	},
 	// 删除用户
 	RemoveUser: (params: any) => {
@@ -48,7 +47,7 @@ export default {
 	RemoveUsers: (params: any) => {
 		return fetchPost('/users/removeUsers', params);
 	},
-	// 批量删除juese
+	// 批量删除角色
 	RemoveRoles: (params: any) => {
 		return fetchPost2('/role/deleteRole', params);
 	},

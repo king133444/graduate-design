@@ -10,6 +10,7 @@ import ProjectManage from "@/views/projectManage";
 import TicketManage from "@/views/ticketManage";
 import FacilityManage from "@/views/facilityManage";
 import CommentManage from "@/views/commentManage";
+import VisitorManage from "@/views/visitorManage/visitor";
 // import Dashboard from "@/views/dashboard/index";
 // import other components...
 
@@ -76,6 +77,17 @@ export const rootRouter: any = [
 				meta: {
 					title: "设施管理",
 					key: "ticketManage"
+				}
+			},
+			{
+				path: "visitorManage",
+				element:
+					<AuthRoute>
+						<VisitorManage />
+					</AuthRoute>,
+				meta: {
+					title: "留言板",
+					key: "visitorManage"
 				}
 			},
 			{
