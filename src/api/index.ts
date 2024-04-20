@@ -1,4 +1,4 @@
-import { fetchPost, fetchPost2 } from "@/components/ReqInstance/axios";
+import { fetchGet, fetchPost, fetchPost2 } from "@/components/ReqInstance/axios";
 
 export default {
 	/**
@@ -28,7 +28,7 @@ export default {
 	 * 用户相关接口
 	 */
 	// 修改我的用户信息
-	updateMyUser: (params: any) => {
+	UpdateMyUser: (params: any) => {
 		return fetchPost('/users/updateMyUser', params);
 	},
 	// 删除用户
@@ -38,6 +38,10 @@ export default {
 	// 用户列表
 	GetUsers: (params: any) => {
 		return fetchPost('/users/users', params);
+	},
+	// 游客列表
+	GetTourists: (params: any) => {
+		return fetchGet('/users/tourists', params);
 	},
 	// 修改用户信息
 	UpdateUser: (params: any) => {
@@ -59,5 +63,41 @@ export default {
 	CreateUsers: (params: any) => {
 		return fetchPost('/auth/createBatchUser', params);
 	},
-
+	// 充值
+	Recharge: (params: any) => {
+		return fetchPost('/users/reCharge', params);
+	},
+	/**
+	 * 娱乐项目相关接口
+	 */
+	// 获取娱乐项目信息
+	GetAllAttractions: (params: any) => {
+		return fetchPost('/attraction/attractions', params);
+	},
+	// 修改娱乐项目信息
+	UpdateAttraction: (params: any) => {
+		return fetchPost('/attraction/updataAttraction', params);
+	},
+	// 删除娱乐项目信息
+	DeleteAttraction: (params: any) => {
+		return fetchPost('/attraction/deleteAttraction', params);
+	},
+	/**
+	 * 设施相关接口
+	 */
+	// 获取全部设施
+	GetAllEquipments: (params: any) => {
+		return fetchPost('/equipment/equipments', params);
+	},
+	/**
+	 * 门票相关接口
+	 */
+	// 获取所有门票
+	GetAllTickets: (params: any) => {
+		return fetchPost('/ticket/tickets', params);
+	},
+	// 购买门票
+	BuyTickets: (params: any) => {
+		return fetchPost('/ticket/buyTickets', params);
+	},
 }

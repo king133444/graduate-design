@@ -1,73 +1,94 @@
-import { Breadcrumb, Table } from 'antd';
+import './styles/styles.less'
+
+import { Breadcrumb, Table, message } from 'antd';
 import { HomeOutlined } from '@ant-design/icons'
+import api from '@/api';
+import { useEffect, useState } from 'react';
 const RoleManagement = () => {
-    const dataSource = [
-        {
-            key: '1',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            role: 'Admin',
-        },
-        {
-            key: '2',
-            name: 'Jane Doe',
-            email: 'jane.doe@example.com',
-            role: 'User',
-        },
-        {
-            key: '3',
-            name: 'Jim Doe',
-            email: 'jim.doe@example.com',
-            role: 'User',
-        },
-    ];
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState();
+  const [tableLoading, setTableLoading] = useState(false);
+  const columns: any = [
+    {
+      title: '序号',
+      dataIndex: 'id',
+      align: 'center',
+      key: 'id',
+    },
+    {
+      title: '角色名',
+      dataIndex: 'name',
+      align: 'center',
+      key: 'role',
+    },
+  ];
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
-        },
-    ];
+  // 获取用户列表信息
+  const getRoles = async () => {
+    try {
+      const result: any = await api.GetRoles({});
+      console.log(result);
 
-    return (
-        <div>
-            <Breadcrumb
-                items={[
-                    {
-                        href: '#/home',
-                        title: (
-                            <>
-                                <HomeOutlined rev={undefined} />
-                                <span>主菜单</span>
-                            </>
-                        ),
-                    },
-                    {
-                        // href: '', // 或者设置为空字符串，保持当前页面
-                        title: (
-                            <>
+      const { success, data, message: info } = result
+      if (success) {
+        setData(data.roles);
+        setTotal(data.total);
+      } else {
+        message.error(info)
+      }
+    } catch (error) {
+      message.error('获取失败')
+    } finally {
+      setTableLoading(false);
+    }
+  };
+  useEffect(() => {
+    setTableLoading(true);
+    getRoles();
+  }, []);
+  return (
+    <div>
+      <Breadcrumb
+        items={[
+          {
+            href: '#/home',
+            title: (
+              <>
+                <HomeOutlined rev={undefined} />
+                <span>主菜单</span>
+              </>
+            ),
+          },
+          {
+            // href: '', // 或者设置为空字符串，保持当前页面
+            title: (
+              <>
 
-                                <span>角色管理</span>
-                            </>
-                        ),
-                    },
-                ]}
-            />
-            <br />
-            <Table dataSource={dataSource} columns={columns} />
-        </div>
-    );
+                <span>角色管理</span>
+              </>
+            ),
+          },
+        ]}
+      />
+      <br />
+      <Table
+        className='custom-table'
+        loading={tableLoading}
+        bordered={true}
+        dataSource={data}
+        columns={columns}
+        scroll={{ y: 240 }}
+        pagination={
+          {
+            total: total,
+            showTotal: (total) => `总共 ${total} 条数据`,
+            defaultPageSize: 5,
+            defaultCurrent: 1
+          }}
+      />
+
+    </div>
+  );
 };
 
 export default RoleManagement;

@@ -8,13 +8,13 @@ export default function RefreshToken() {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
 
-    // 一分钟刷新一次令牌
+    // 一小时刷新一次令牌
     useEffect(() => {
         timer.current = setInterval(async () => {
-            let refreshToken = sessionStorage.getItem('refresh_token')
+            let refreshToken = sessionStorage.getItem('refresh_token');
 
             if (refreshToken === '') {
-                navigate('/login')
+                navigate('/login');
             }
             try {
                 const result: any = await api.RefreshToken({
@@ -22,31 +22,32 @@ export default function RefreshToken() {
                 })
                 const { success, data, message: info } = result
                 if (!success) {
-                    message.error(info)
+                    message.error(info);
+                    sessionStorage.setItem('access_token', '');
                     logout()
                 } else {
-                    const newAccessToken = data.accessToken
+                    const newAccessToken = data.accessToken;
                     // 不再更新刷新令牌
-                    sessionStorage.setItem('access_token', newAccessToken)
+                    sessionStorage.setItem('access_token', newAccessToken);
                 }
             } catch {
-                message.error('刷新令牌失败，请重新登录')
-                navigate('/login')
+                message.error('刷新令牌失败，请重新登录');
+                navigate('/login');
             }
-        }, 30 * 1000)
+        }, 3600 * 1000)
         return () => {
             if (timer.current) {
-                clearInterval(timer.current)
+                clearInterval(timer.current);
             }
         }
     })
 
     const logout = () => {
-        sessionStorage.setItem('access_token', '')
-        sessionStorage.setItem('refresh_token', '')
-        sessionStorage.setItem('selectKey', '')
-        navigate('/login')
-    }
+        sessionStorage.setItem('access_token', '');
+        sessionStorage.setItem('refresh_token', '');
+        sessionStorage.setItem('selectKey', '');
+        navigate('/login');
+    };
 
     return (
         <></>

@@ -4,7 +4,6 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
-
 import { Layout, Menu, Button, theme, Switch } from 'antd';
 import getItems from './sider/menuItem';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -13,10 +12,10 @@ import './index.less'
 import siderLogo from '@/assets/images/logo_name.svg';
 import LayoutHeader from './header';
 import RefreshToken from '../token';
-import { getMenuKeys } from './sider/getRoutes'
 const { Sider, Content, Footer } = Layout;
 const Home: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const items = getItems();
   const [selectKey, setSelectKey] = useState<string>()
   const [collapsed, setCollapsed] = useState(false);
@@ -33,11 +32,7 @@ const Home: React.FC = () => {
     }
     setIsDarkTheme(globaltheme === 'dark');
   }, [selectKey, globaltheme])
-  const [defaultSelectKey, setDefaultSelectKey] = useState<string>('')
 
-  useEffect(() => {
-    setDefaultSelectKey(getMenuKeys(location.pathname))
-  }, [getMenuKeys(location.pathname)])
   const changeTheme = (value: boolean) => {
     setGlobalTheme(value ? 'dark' : 'light');
   };
@@ -73,7 +68,7 @@ const Home: React.FC = () => {
             onSelect={({ key }) => {
               setSelectKey(key);
             }}
-            selectedKeys={[defaultSelectKey]}
+            defaultSelectedKeys={['1']}
             items={items} />
           <Button
             type={isDarkTheme ? 'primary' : 'text'}

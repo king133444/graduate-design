@@ -10,7 +10,7 @@ import ProjectManage from "@/views/projectManage";
 import TicketManage from "@/views/ticketManage";
 import FacilityManage from "@/views/facilityManage";
 import CommentManage from "@/views/commentManage";
-import VisitorManage from "@/views/visitorManage/visitor";
+import VisitorManage from "@/views/visitorManage";
 // import Dashboard from "@/views/dashboard/index";
 // import other components...
 

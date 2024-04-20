@@ -1,6 +1,6 @@
 import './index.less';
 
-import bg from '@/assets/images/login_bg.png';
+import bg from '@/assets/images/login_bg.jpg';
 import logo from '@/assets/images/logo.svg';
 import logoName from '@/assets/images/logo_name.svg';
 
@@ -15,7 +15,10 @@ const Login = () => {
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				width: '100vw',
-				height: '100vh'
+				height: '100vh',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
 			}}
 		>
 			<div className="login-box">
@@ -27,7 +30,18 @@ const Login = () => {
 					<LoginForm />
 				</div>
 			</div>
+			{/* 备案号信息 */}
+			<div style={{ textAlign: 'center', marginBottom: '20px' }}>
+				<a href="https://beian.miit.gov.cn"
+					target="_blank"
+					className="gradient-text"
+					rel="noopener noreferrer"
+					style={{ color: 'white', textDecoration: 'none' }}>
+					黑ICP备2024021414号-1
+				</a>
+			</div>
 		</div>
+
 	);
 };
 

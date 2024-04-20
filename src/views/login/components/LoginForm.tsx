@@ -40,15 +40,16 @@ const LoginForm = () => {
         const { success } = result;
 
         if (success) {
-          message.success("注册成功！");
-          navigate('/login');
+          message.success("添加用户成功");
+          setRegister(false);
         } else {
-          message.error('注册失败')
+          message.error('添加用户失败')
         }
       } catch (error) {
-        message.error('注册失败')
+        message.error('添加用户失败')
       } finally {
         setLoading(false);
+
       }
     }
     else {
@@ -62,13 +63,14 @@ const LoginForm = () => {
 
         if (success) {
           const { accessToken, refreshToken } = data.tokens;
-          const { name, id, email, roleId } = data.user
+          const { name, id, email, roleId, balance } = data.user
           console.log(accessToken, refreshToken) // 添加这一行
           sessionStorage.setItem('access_token', accessToken)
           sessionStorage.setItem('refresh_token', refreshToken)
           sessionStorage.setItem('username', name)
           sessionStorage.setItem('email', email)
           sessionStorage.setItem('roleId', roleId)
+          sessionStorage.setItem('balance', balance)
 
           sessionStorage.setItem('id', id)
           message.success("登录成功！");

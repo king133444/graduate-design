@@ -1,12 +1,10 @@
-import './styles/styles.less'
-
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Button, Form, Input, Modal, Select, Space, Table, message } from 'antd';
 import { HomeOutlined, ExclamationCircleTwoTone, UserOutlined, LockOutlined } from '@ant-design/icons';
 import api from '../../api/index';
 import { ColumnsType } from 'antd/es/table';
 
-const AccountManagement = () => {
+const VisitorManage = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
@@ -20,7 +18,7 @@ const AccountManagement = () => {
   // 获取用户列表信息
   const getUsers = async () => {
     try {
-      const result: any = await api.GetUsers({});
+      const result: any = await api.GetTourists({});
       console.log(result);
 
       const { success, data, message: info } = result
@@ -139,6 +137,12 @@ const AccountManagement = () => {
       key: 'email',
     },
     {
+      title: '余额',
+      dataIndex: 'balance',
+      align: 'center',
+      key: 'balance',
+    },
+    {
       title: '操作',
       dataIndex: 'operation',
       align: 'center',
@@ -180,7 +184,7 @@ const AccountManagement = () => {
             {
               title: (
                 <>
-                  <span>账号管理</span>
+                  <span>游客管理</span>
                 </>
               ),
             },
@@ -195,12 +199,12 @@ const AccountManagement = () => {
       </div>
       <br />
       <Table
-        className='custom-table'
         rowKey="id"
         dataSource={data}
         columns={columns}
         loading={tableLoading}
         bordered={true}
+        scroll={{ y: 240 }}
         pagination={
           {
             total: total,
@@ -343,4 +347,4 @@ const AccountManagement = () => {
   );
 };
 
-export default AccountManagement;
+export default VisitorManage;
