@@ -1,12 +1,10 @@
-import './styles/styles.less'
-
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Button, Form, Input, Modal, Select, Space, Table, message } from 'antd';
 import { HomeOutlined, ExclamationCircleTwoTone, UserOutlined, LockOutlined } from '@ant-design/icons';
 import api from '../../api/index';
 import { ColumnsType } from 'antd/es/table';
 
-const AccountManagement = () => {
+const VisitorManage = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState();
@@ -20,7 +18,7 @@ const AccountManagement = () => {
   // 获取用户列表信息
   const getUsers = async () => {
     try {
-      const result: any = await api.GetUsers({});
+      const result: any = await api.GetTourists({});
       console.log(result);
 
       const { success, data, message: info } = result
@@ -115,9 +113,8 @@ const AccountManagement = () => {
       message.error('注册失败')
     } finally {
       setLoading(false);
-      setVisibleAdd(false);
       getUsers();
-      form.resetFields();
+      setVisibleAdd(false);
     }
   };
   const columns: ColumnsType<any> = [
@@ -137,37 +134,16 @@ const AccountManagement = () => {
       key: 'name',
     },
     {
-      title: '身份',
-      dataIndex: 'roleId',
-      align: 'center',
-      key: 'roleId',
-      render: (record) => {
-        switch (record) {
-          case 1:
-            return <span>管理员</span>;
-          case 2:
-            return <span>经理</span>;
-          case 3:
-            return <span>维修人员</span>;
-          case 4:
-            return <span>检查人员</span>;
-          case 5:
-            return <span>采购人员</span>;
-          case 6:
-            return <span>设备供应商</span>;
-          case 7:
-            return <span>游客</span>;
-          default:
-            return null; // Handle other cases if needed
-        }
-      }
-
-    },
-    {
       title: '邮箱',
       dataIndex: 'email',
       align: 'center',
       key: 'email',
+    },
+    {
+      title: '余额',
+      dataIndex: 'balance',
+      align: 'center',
+      key: 'balance',
     },
     {
       title: '操作',
@@ -211,7 +187,7 @@ const AccountManagement = () => {
             {
               title: (
                 <>
-                  <span>账号管理</span>
+                  <span>游客管理</span>
                 </>
               ),
             },
@@ -226,19 +202,17 @@ const AccountManagement = () => {
       </div>
       <br />
       <Table
-        className='custom-table'
-        rowKey="id"
-        dataSource={data}
         columns={columns}
+        dataSource={data}
+        rowKey="id"
         loading={tableLoading}
-        bordered={true}
-        pagination={
-          {
-            total: total,
-            showTotal: (total) => `总共 ${total} 条数据`,
-            defaultPageSize: 5,
-            defaultCurrent: 1
-          }}
+        bordered
+        pagination={{
+          total: total,
+          showTotal: (total) => `总共 ${total} 条数据`,
+          defaultPageSize: 5,
+          defaultCurrent: 1,
+        }}
       />
       <Modal
         title='修改用户'
@@ -353,9 +327,10 @@ const AccountManagement = () => {
             name="role"
             rules={[{ required: true, message: '请选择角色' }]}
             style={{ marginBottom: '10px' }}
+            initialValue={7}
           >
             <Select
-              defaultValue={1}
+              disabled
               style={{ width: 240 }}
               options={[
                 { value: 1, label: '管理员' },
@@ -374,4 +349,4 @@ const AccountManagement = () => {
   );
 };
 
-export default AccountManagement;
+export default VisitorManage;

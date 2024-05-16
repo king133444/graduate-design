@@ -1,3 +1,11 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	/* 防止页面内容溢出导致滚动 */
+}
+
 .login-container {
 	position: relative;
 	display: flex;
@@ -47,8 +55,9 @@
 
 .login-container .login-box .login-logo .login-icon {
 	position: absolute;
+	top: 2.8vh;
 	width: 500px;
-	left: 19vw;
+	left: 20vw;
 
 }
 
@@ -56,7 +65,7 @@
 	position: absolute;
 	height: auto;
 	width: 500px;
-	margin-top: 0.5vh;
+	top: 3vh;
 	right: 28vw;
 }
 
@@ -104,3 +113,16 @@
 // .ant-form-item-label > label {
 //  height: 1px !important;
 // }
+
+.gradient-text {
+	background: -webkit-linear-gradient(45deg, blue, purple);
+	/* Chrome, Safari */
+	background: linear-gradient(45deg, blue, purple);
+	/* 标准语法 */
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	/* Chrome, Safari */
+	color: transparent;
+	/* 将文字颜色设置为透明，以显示背景的渐变色 */
+}
