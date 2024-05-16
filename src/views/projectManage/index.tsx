@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Form, Input, message, Space, Breadcrumb, Radio, DatePicker } from 'antd';
+import { useEffect, useState } from 'react';
+import { Table, Button, Modal, Form, Input, message, Space, Breadcrumb, Radio, DatePicker, Layout } from 'antd';
 import { PlusOutlined, HomeOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
 import api from '@/api';
-import moment from 'moment';
-// import moment from 'moment';
+import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
+const { Content } = Layout;
 type Attraction = {
   id?: number,
   name?: string,
@@ -31,7 +32,6 @@ const ProjectManage = () => {
   const getAttractions = async () => {
     try {
       const result: any = await api.GetAllAttractions({});
-      console.log(result);
 
       const { success, data, message: info } = result
       if (success) {
@@ -52,7 +52,7 @@ const ProjectManage = () => {
     getAttractions();
   }, []);
   const disabledTime = () => {
-    const current = moment();
+    const current = dayjs();
     const hours = current.hour();
     const minutes = current.minute();
     return {
@@ -72,13 +72,18 @@ const ProjectManage = () => {
     // }
 
     form.setFieldsValue({
+      id: record.id,
       name: record.name,
       type: record.type,
       description: record.description,
-
+      openingTime: [
+        record.openingTime ? dayjs(record.openingTime) : null,
+        record.closingTime ? dayjs(record.closingTime) : null
+      ],
       status: record.status
     });
     setIsModalVisible(true);
+
   };
   const handleAdd = () => {
     setConvert(true);
@@ -91,23 +96,39 @@ const ProjectManage = () => {
     const params: Attraction = {
       name: data.name || null,
       type: data.type || null,
-      description: data.dedescription || null,
-      openingTime: data.openingTime || null,
-      closingTime: data.closingTime || null,
+      description: data.description || null,
+      openingTime: data.openingTime[0] || null,
+      closingTime: data.openingTime[1] || null,
       status: data.status || null
     }
-    try {
-      const result: any = api.UpdateAttraction(params);
-      if (result.success) {
-        message.success('修改成功');
-        getAttractions();
+    if (convert) {
+      try {
+        const result: any = await api.CreateAttractions(params);
+        if (result.success) {
+          message.success('添加成功');
+          getAttractions();
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsModalVisible(false);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsModalVisible(false);
-    }
+    } else {
+      try {
+        params.id = data.id;
+        const result: any = await api.UpdateAttraction(params);
+        console.log('re', result);
 
+        if (result.success) {
+          message.success('修改成功');
+          getAttractions();
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsModalVisible(false);
+      }
+    }
   };
   const showDeleteModal = (record: any) => {
     // 打开删除弹窗
@@ -116,7 +137,6 @@ const ProjectManage = () => {
 
   };
   const handleDelete = async () => {
-    await form.validateFields();
     try {
       const result: any = await api.DeleteAttraction({
         id: editId,
@@ -179,18 +199,8 @@ const ProjectManage = () => {
         const openingDate = new Date(record.openingTime);
         const closingDate = new Date(record.closingTime);
 
-        // 格式化日期和时间
-        const dateTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false
-        });
-        const openingTimeFormatted = dateTimeFormatter.format(openingDate);
-        const closingTimeFormatted = dateTimeFormatter.format(closingDate);
+        const openingTimeFormatted = dayjs(openingDate).format('YYYY-MM-DD HH:mm:ss');
+        const closingTimeFormatted = dayjs(closingDate).format('YYYY-MM-DD HH:mm:ss');
         // setStarttime(openingTimeFormatted);
         // setEndtime(closingTimeFormatted);
         return `${openingTimeFormatted} - ${closingTimeFormatted}`;
@@ -247,127 +257,138 @@ const ProjectManage = () => {
 
   return (
     <>
-      <Breadcrumb
-        items={[
-          {
-            href: '#/home',
-            title: (
-              <>
-                <HomeOutlined rev={undefined} />
-                <span>主菜单</span>
-              </>
-            ),
-          },
-          {
-            // href: '', // 或者设置为空字符串，保持当前页面
-            title: (
-              <>
+      <Layout style={{ borderRadius: '10', backgroundColor: 'white', overflow: 'auto', height: '70vh' }}>
+        <Content style={{ padding: '0 50px', borderRadius: '10' }}>
+          <Breadcrumb
+            items={[
+              {
+                href: '#/home',
+                title: (
+                  <>
+                    <HomeOutlined rev={undefined} />
+                    <span>主菜单</span>
+                  </>
+                ),
+              },
+              {
+                // href: '', // 或者设置为空字符串，保持当前页面
+                title: (
+                  <>
 
-                <span>项目管理</span>
-              </>
-            ),
-          },
-        ]}
-      />
-      <br />
-      <Button
-        type="primary"
-        size='middle'
-        icon={<PlusOutlined rev={undefined} />} onClick={handleAdd}>
-        新增
-      </Button>
-      <br />
-      <br />
-      <Table
-        columns={columns}
-        dataSource={projects}
-        rowKey="id"
-        bordered={true}
-        loading={tableLoading}
-        pagination={
-          {
-            total: total,
-            showTotal: (total) => `总共 ${total} 条数据`,
-            defaultPageSize: 5,
-            defaultCurrent: 1
-          }}
-      />
-      <Modal
-        title={convert ? '新增' : '修改'}
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <Form form={form} layout="vertical" name="form_in_modal">
-          <Form.Item
-            name="name"
-            label="项目名"
-            rules={[{ required: true, message: '请输入项目名' }]}
+                    <span>项目管理</span>
+                  </>
+                ),
+              },
+            ]}
+          />
+          <br />
+          <Button
+            type="primary"
+            size='middle'
+            icon={<PlusOutlined rev={undefined} />} onClick={handleAdd}>
+            新增
+          </Button>
+          <br />
+          <br />
+          <Table
+            columns={columns}
+            dataSource={projects}
+            rowKey="id"
+            bordered={true}
+            loading={tableLoading}
+            pagination={
+              {
+                total: total,
+                showTotal: (total) => `总共 ${total} 条数据`,
+                defaultPageSize: 5,
+                defaultCurrent: 1
+              }}
+          />
+          <Modal
+            title={convert ? '新增' : '修改'}
+            open={isModalVisible}
+            onOk={handleOk}
+            onCancel={() => setIsModalVisible(false)}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="type"
-            label="类型"
-            rules={[{ required: true, message: '请选择类型' }]}
-          >
-            <Radio.Group>
-              <Radio value='1'>惊险刺激</Radio>
-              <Radio value='2'>适中</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="描述"
-            rules={[{ required: true, message: '请输入项目描述' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            name="openingTime"
-            label="开放时间"
-            rules={[{ required: true, message: '请选择开始时间' }]}
-          >
-            <RangePicker
-              showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
-              // defaultValue={defaultValue}
-              // disabled={disabledTime}
-              disabledDate={(current) => current && current < moment().startOf('day')}
-              disabledTime={disabledTime}
+            <Form form={form} layout="vertical" name="form_in_modal">
+              <Form.Item
+                name="id"
+                style={{ display: 'none' }}
+              >
 
-            />
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="状态"
-            rules={[{ required: true, message: '请选择状态' }]}
+              </Form.Item>
+              <Form.Item
+                name="name"
+                label="项目名"
+                rules={[{ required: true, message: '请输入项目名' }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="type"
+                label="类型"
+                rules={convert ? [{ required: true, message: '请选择类型' }] : []}
+              >
+                <Radio.Group>
+                  <Radio value='1'>惊险刺激</Radio>
+                  <Radio value='2'>适中</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item
+                name="description"
+                label="描述"
+                rules={convert ? [{ required: true, message: '请输入项目描述' }] : []}
+              >
+                <Input.TextArea />
+              </Form.Item>
+              <Form.Item
+                name="openingTime"
+                label="开放时间"
+                rules={convert ? [{ required: true, message: '请选择开始时间' }] : []}
+              >
+                <RangePicker
+                  showTime={{ format: 'HH:mm' }}
+                  format="YYYY-MM-DD HH:mm"
+                  // defaultValue={defaultValue}
+                  // disabled={disabledTime}
+                  disabledDate={(current) => current && current < dayjs().startOf('day')}
+                  disabledTime={disabledTime}
+
+                />
+              </Form.Item>
+              <Form.Item
+                name="status"
+                label="状态"
+                rules={convert ? [{ required: true, message: '请选择状态' }] : []}
+              >
+                <Radio.Group>
+                  <Radio value='0'>不可用</Radio>
+                  <Radio value='1'>可用</Radio>
+                </Radio.Group>
+
+              </Form.Item>
+            </Form>
+          </Modal>
+          <Modal
+            title={
+              <Space>
+                <ExclamationCircleTwoTone rev={undefined} />
+                删除项目
+              </Space>
+            }
+            open={visibleDelete}
+            onOk={handleDelete}
+            onCancel={() => { setVisibleDelete(false) }}
+            okText="确定"
+            cancelText="取消"
+
           >
-            <Radio.Group>
-              <Radio value='0'>不可用</Radio>
-              <Radio value='1'>可用</Radio>
-            </Radio.Group>
-
-          </Form.Item>
-        </Form>
-      </Modal>
-      <Modal
-        title={
-          <Space>
-            <ExclamationCircleTwoTone rev={undefined} />
-            删除项目
-          </Space>
-        }
-        open={visibleDelete}
-        onOk={handleDelete}
-        onCancel={() => { setVisibleDelete(false) }}
-        okText="确定"
-        cancelText="取消"
-
-      >
-        确认是否删除？
-      </Modal>
+            确认是否删除？
+          </Modal>
+        </Content>
+      </Layout>
     </>
+
   );
 };
 

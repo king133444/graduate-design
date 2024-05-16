@@ -107,6 +107,7 @@ const AccountManagement = () => {
 
       if (success) {
         message.success("注册成功！");
+        getUsers();
       } else {
         message.error('注册失败')
       }
@@ -114,6 +115,9 @@ const AccountManagement = () => {
       message.error('注册失败')
     } finally {
       setLoading(false);
+      setVisibleAdd(false);
+      getUsers();
+      form.resetFields();
     }
   };
   const columns: ColumnsType<any> = [
@@ -131,6 +135,33 @@ const AccountManagement = () => {
       dataIndex: 'name',
       align: 'center',
       key: 'name',
+    },
+    {
+      title: '身份',
+      dataIndex: 'roleId',
+      align: 'center',
+      key: 'roleId',
+      render: (record) => {
+        switch (record) {
+          case 1:
+            return <span>管理员</span>;
+          case 2:
+            return <span>经理</span>;
+          case 3:
+            return <span>维修人员</span>;
+          case 4:
+            return <span>检查人员</span>;
+          case 5:
+            return <span>采购人员</span>;
+          case 6:
+            return <span>设备供应商</span>;
+          case 7:
+            return <span>游客</span>;
+          default:
+            return null; // Handle other cases if needed
+        }
+      }
+
     },
     {
       title: '邮箱',

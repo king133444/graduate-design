@@ -105,6 +105,7 @@ const VisitorManage = () => {
 
       if (success) {
         message.success("注册成功！");
+        getUsers();
       } else {
         message.error('注册失败')
       }
@@ -112,6 +113,8 @@ const VisitorManage = () => {
       message.error('注册失败')
     } finally {
       setLoading(false);
+      getUsers();
+      setVisibleAdd(false);
     }
   };
   const columns: ColumnsType<any> = [
@@ -199,19 +202,17 @@ const VisitorManage = () => {
       </div>
       <br />
       <Table
-        rowKey="id"
-        dataSource={data}
         columns={columns}
+        dataSource={data}
+        rowKey="id"
         loading={tableLoading}
-        bordered={true}
-        scroll={{ y: 240 }}
-        pagination={
-          {
-            total: total,
-            showTotal: (total) => `总共 ${total} 条数据`,
-            defaultPageSize: 5,
-            defaultCurrent: 1
-          }}
+        bordered
+        pagination={{
+          total: total,
+          showTotal: (total) => `总共 ${total} 条数据`,
+          defaultPageSize: 5,
+          defaultCurrent: 1,
+        }}
       />
       <Modal
         title='修改用户'
@@ -326,9 +327,10 @@ const VisitorManage = () => {
             name="role"
             rules={[{ required: true, message: '请选择角色' }]}
             style={{ marginBottom: '10px' }}
+            initialValue={7}
           >
             <Select
-              defaultValue={1}
+              disabled
               style={{ width: 240 }}
               options={[
                 { value: 1, label: '管理员' },
