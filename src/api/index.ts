@@ -83,9 +83,9 @@ export default {
 	CreateComment: (params: any) => {
 		return fetchPost('/comment/createComment', params);
 	},
-	// 获取评论
-	DeleteComments: (params: any) => {
-		return fetchGet('/comment/deleteComment', params);
+	// 删除评论
+	DeleteComment: (params: any) => {
+		return fetchPost('/comment/deleteComment', params);
 	},
 	/**
 	 * 娱乐项目相关接口
@@ -152,6 +152,10 @@ export default {
 	// 批准或拒绝报修设备审批
 	ApproveEquipmentPurchase: (params: any) => {
 		return fetchPost('/equipment/approveEquipmentPurchasePlan', params);
+	},
+	// 验收设备
+	AcceptanceEquipment: (params: any) => {
+		return fetchPost('/equipment/acceptanceEquipment', params);
 	},
 	// 删除设施信息
 	DeleteEquipmentFaultReports: (params: any) => {
