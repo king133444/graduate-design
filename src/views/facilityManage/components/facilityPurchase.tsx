@@ -279,7 +279,7 @@ const FacilityPurchase = () => {
                 title: (
                   <>
                     <RocketOutlined rev={undefined} />
-                    <span>设施管理</span>
+                    <span>设备管理</span>
                   </>
                 )
               },
@@ -296,7 +296,7 @@ const FacilityPurchase = () => {
           <br />
         </Col>
         <Col>
-          {(role === "1" || role === "2" || role === "5") && (
+          {(role === "1" || role === "5") && (
             <Button
               onClick={() => {
                 writeRecordVisible();

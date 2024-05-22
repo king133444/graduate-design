@@ -264,7 +264,7 @@ const TicketManage = () => {
               showReserveModal(_text, record);
             }}
           >
-            预定
+            预订
           </a>
           <a
             onClick={() => {
@@ -339,8 +339,8 @@ const TicketManage = () => {
               defaultCurrent: 1
             }}
           />
-          <Modal title="预定" onOk={handlePurchase} open={visibleEdit} onCancel={handleCancle} width={280}>
-            <Form title="预定" form={form}>
+          <Modal title="预订" onOk={handlePurchase} open={visibleEdit} onCancel={handleCancle} width={280}>
+            <Form title="预订" form={form}>
               <Form.Item label="门票：" name="tickets">
                 <Input disabled />
               </Form.Item>

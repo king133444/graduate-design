@@ -320,7 +320,7 @@ const FacilityManage = () => {
                     title: (
                       <>
                         <RocketOutlined rev={undefined} />
-                        <span>设施管理</span>
+                        <span>设备管理</span>
                       </>
                     )
                   }

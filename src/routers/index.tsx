@@ -77,7 +77,7 @@ export const rootRouter: any = [
 						<FacilityManage />
 					</AuthRoute>,
 				meta: {
-					title: "设施管理",
+					title: "设备管理",
 					key: "ticketManage"
 				},
 				children: [
