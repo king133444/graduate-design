@@ -47,7 +47,7 @@ const CommentManage = () => {
   const handleDelete = async (id: number) => {
 
     try {
-      const result: any = await api.DeleteComments({
+      const result: any = await api.DeleteComment({
         id: id,
       });
       const { success, message: info } = result;

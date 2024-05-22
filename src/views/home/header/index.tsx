@@ -145,7 +145,7 @@ export default function LayoutHeader() {
                         case 4:
                           return <span>检查人员</span>;
                         case 5:
-                          return <span>采购人员</span>;
+                          return <span>采购部门</span>;
                         case 6:
                           return <span>设备供应商</span>;
                         case 7:

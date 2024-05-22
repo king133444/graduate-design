@@ -218,7 +218,7 @@ const LoginForm = () => {
                 { value: 7, label: '游客' },
                 { value: 3, label: '维修人员' },
                 { value: 4, label: '检查人员' },
-                { value: 5, label: '采购人员' },
+                { value: 5, label: '采购部门' },
                 { value: 6, label: '设备供应商' },
               ]}
             />

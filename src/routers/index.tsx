@@ -77,7 +77,7 @@ export const rootRouter: any = [
 						<FacilityManage />
 					</AuthRoute>,
 				meta: {
-					title: "设施管理",
+					title: "设备管理",
 					key: "ticketManage"
 				},
 				children: [
@@ -112,7 +112,7 @@ export const rootRouter: any = [
 						<VisitorManage />
 					</AuthRoute>,
 				meta: {
-					title: "留言板",
+					title: "留言管理",
 					key: "visitorManage"
 				}
 			},
@@ -123,7 +123,7 @@ export const rootRouter: any = [
 						<CommentManage />
 					</AuthRoute>,
 				meta: {
-					title: "留言板",
+					title: "留言管理",
 					key: "commentManage"
 				}
 			},
