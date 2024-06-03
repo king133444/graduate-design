@@ -28,16 +28,17 @@ export const getRoutes = (key: string) => {
 
 // 根据路由获取菜单Key值
 export const getMenuKeys = (route: string) => {
-    route = route.split('/')[1]
+    // route = route.split('/')[1]
+
     switch (route) {
-        case "personalInformationManagement":
+        case "/home/personalInformationManagement":
             return "menu1"
-        case "accountManagement":
+        case "/home/accountManagement":
             return "menu2"
-        case "roleManagement":
+        case "/home/roleManagement":
             return "menu3"
-        case "home":
-            return 'menu5'
+        case "/home":
+            return "menu5"
         case "/home/projectManage":
             return "menu6"
         case "/home/ticketManage":

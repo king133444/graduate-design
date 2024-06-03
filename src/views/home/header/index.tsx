@@ -11,12 +11,10 @@ export default function LayoutHeader() {
   const [form] = Form.useForm();
   const [formRecharge] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  let username = sessionStorage.getItem('username');
-  let email = sessionStorage.getItem('email');
-  let balance = sessionStorage.getItem('balance');
   let id = sessionStorage.getItem('id');
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [recharge, setRecharge] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>([]);
 
   const handlePasswordClick = () => {
     setIsPasswordModalVisible(true);
@@ -74,8 +72,28 @@ export default function LayoutHeader() {
     } catch (error) {
       message.error('获取失败')
     } finally {
+      getMyUser();
       setLoading(false);
       setRecharge(false);
+    }
+  };
+
+  // 获取用户列表信息
+  const getMyUser = async () => {
+    try {
+      const result: any = await api.GetMyUser({
+        id: id ? parseInt(id) : null,
+      });
+      console.log(result);
+
+      const { success, data, message: info } = result
+      if (success) {
+        setUserInfo(data.data);
+      } else {
+        message.error(info)
+      }
+    } catch (error) {
+      message.error('获取个人信息失败')
     }
   };
   const logout = () => {
@@ -102,53 +120,77 @@ export default function LayoutHeader() {
 
         <Popover
           content={
-            <Row style={{ width: '40vh', height: '24vh' }}>
+            <Row style={{ width: '44vh', height: '26vh' }} justify={'center'}>
               <Col span={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar
                   style={{ marginRight: 30, marginBottom: 30, backgroundColor: '#87d068' }}
                   size={64}
                 >
-                  {username}</Avatar>
+                  {userInfo.name}</Avatar>
               </Col>
-              <Col span={16} style={{ marginTop: '2vh' }}>
-                <Row>
-                  <Col style={{ fontSize: 14, marginBottom: 10, marginRight: 40 }}>
-                    用户ID:
+              <Col span={16}>
+                <Row align="middle" style={{ marginTop: '2vh' }}>
+                  <Col span={8} style={{ fontSize: 14, }}>
+                    身份：
                   </Col>
-                  <Col>
-                    {id}
+                  <Col span={16}>
+                    {(() => {
+                      switch (userInfo.roleId) {
+                        case 1:
+                          return <span>管理员</span>;
+                        case 2:
+                          return <span>经理</span>;
+                        case 3:
+                          return <span>维修人员</span>;
+                        case 4:
+                          return <span>检查人员</span>;
+                        case 5:
+                          return <span>采购部门</span>;
+                        case 6:
+                          return <span>设备供应商</span>;
+                        case 7:
+                          return <span>游客</span>;
+                        default:
+                          return null;
+                      }
+                    })()}
                   </Col>
                 </Row>
-                <Row>
-                  <Col style={{ fontSize: 14, marginBottom: 10, marginRight: 40 }}>
+                <Row align="middle" style={{ marginTop: '2vh' }}>
+                  <Col span={8} style={{ fontSize: 14, }}>
                     用户名:
                   </Col>
-                  <Col>
-                    {username}
+                  <Col span={16}>
+                    {userInfo.name}
                   </Col>
                 </Row>
-                <Row>
-                  <Col style={{ fontSize: 14, marginBottom: 10, marginRight: 40 }}>
+                <Row align="middle" style={{ marginTop: '2vh' }}>
+                  <Col span={8} style={{ fontSize: 14, }}>
                     邮箱:
                   </Col>
-                  <Col style={{ fontSize: 12, marginTop: 2 }}>
-                    {email}
+                  <Col span={16} style={{ fontSize: 10 }}>
+                    {userInfo.email}
                   </Col>
                 </Row>
-                <Row>
-                  <Col style={{ fontSize: 14, marginBottom: 10, marginRight: 40 }}>
+                <Row align="middle" style={{ marginTop: '2vh' }}>
+                  <Col span={8} style={{ fontSize: 14, }}>
                     余额:
                   </Col>
-                  <Col>
-                    {balance}
+                  <Col span={16}>
+                    {userInfo.balance}
                   </Col>
                 </Row>
-
               </Col>
-              <Row style={{ display: 'flex', justifyContent: 'space-between', marginLeft: '2vw' }}>
+              <Row style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginLeft: '2vw',
+                marginTop: '2vh',
+              }}>
                 <Col style={{ marginRight: '1vw' }}>
                   <Button
                     type='primary'
+                    size='small'
                     // style={{ width: '4vw' }}
                     onClick={() => { setRecharge(true) }}>
                     充值
@@ -157,6 +199,7 @@ export default function LayoutHeader() {
                 <Col style={{ marginRight: '1vw' }}>
                   <Button
                     type='text'
+                    size='small'
                     // style={{ width: '6vw' }}
                     onClick={handlePasswordClick}>
                     修改密码
@@ -165,6 +208,7 @@ export default function LayoutHeader() {
                 <Col>
                   <Button
                     type='text'
+                    size='small'
                     // style={{ width: '6vw' }}
                     onClick={() => { logout() }}>
                     登出
@@ -176,8 +220,9 @@ export default function LayoutHeader() {
           trigger="click"
         >
           <Avatar
-            style={{ marginRight: 30, marginBottom: 10, backgroundColor: '#87d068' }}
+            style={{ marginRight: 40, backgroundColor: '#87d068' }}
             icon={<UserOutlined rev={undefined} />}
+            onClick={getMyUser}
           />
         </Popover>
 
@@ -216,6 +261,7 @@ export default function LayoutHeader() {
         width={500}
         open={recharge}
         onOk={handleReCharge}
+        onCancel={() => { setRecharge(false) }}
       >
         <Form
           form={formRecharge}

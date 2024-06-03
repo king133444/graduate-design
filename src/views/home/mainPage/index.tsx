@@ -1,9 +1,9 @@
 import React from 'react';
-import { Breadcrumb, Layout } from 'antd';
-import LineChart from './LineChart';
-import PieChart from './PieChart';
-import BarChart from './BarChart';
+import { Breadcrumb, Col, Layout, Row } from 'antd';
 import { HomeOutlined } from '@ant-design/icons'
+import UserStatistics from './UserStatistics/userStatistics.tsx';
+import DeviceStatus from './DeviceStatus/deviceStatus.js';
+import TicketSales from './TicketSales/ticketSales.js';
 const { Content } = Layout;
 
 const MainPage: React.FC = () => (
@@ -31,13 +31,24 @@ const MainPage: React.FC = () => (
             ]} />
     </div>
         <br />
-        <Layout style={{ borderRadius: '10', backgroundColor: 'white' }}>
-            <Content style={{ padding: '0 50px', borderRadius: '10' }}>
-                <LineChart />
-                <PieChart />
-                <BarChart />
+        <Layout style={{ borderRadius: '10px', backgroundColor: 'white', overflow: 'auto', height: '70vh' }}>
+            <Content style={{ padding: '0 50px', borderRadius: '10px' }}>
+                <Row gutter={16} style={{ marginBottom: '20px' }}>
+                    <Col span={12}>
+                        <UserStatistics />
+                    </Col>
+                    <Col span={12}>
+                        <DeviceStatus />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <TicketSales />
+                    </Col>
+                </Row>
             </Content>
-        </Layout></>
+        </Layout>
+    </>
 );
 
 export default MainPage;

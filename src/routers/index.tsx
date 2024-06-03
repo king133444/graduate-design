@@ -11,6 +11,8 @@ import TicketManage from "@/views/ticketManage";
 import FacilityManage from "@/views/facilityManage";
 import CommentManage from "@/views/commentManage";
 import VisitorManage from "@/views/visitorManage";
+import FacilityFault from "@/views/facilityManage/components/facilityFault";
+import FacilityPurchase from "@/views/facilityManage/components/facilityPurchase";
 // import Dashboard from "@/views/dashboard/index";
 // import other components...
 
@@ -75,9 +77,33 @@ export const rootRouter: any = [
 						<FacilityManage />
 					</AuthRoute>,
 				meta: {
-					title: "设施管理",
+					title: "设备管理",
 					key: "ticketManage"
-				}
+				},
+				children: [
+					{
+						path: "facilityFault",
+						element:
+							<AuthRoute>
+								<FacilityFault />
+							</AuthRoute>,
+						meta: {
+							title: "报修管理",
+							key: "facilityFault"
+						}
+					},
+					{
+						path: "facilityPurchase",
+						element:
+							<AuthRoute>
+								<FacilityPurchase />
+							</AuthRoute>,
+						meta: {
+							title: "报修管理",
+							key: "facilityPurchase"
+						}
+					},
+				]
 			},
 			{
 				path: "visitorManage",
@@ -86,7 +112,7 @@ export const rootRouter: any = [
 						<VisitorManage />
 					</AuthRoute>,
 				meta: {
-					title: "留言板",
+					title: "留言管理",
 					key: "visitorManage"
 				}
 			},
@@ -97,7 +123,7 @@ export const rootRouter: any = [
 						<CommentManage />
 					</AuthRoute>,
 				meta: {
-					title: "留言板",
+					title: "留言管理",
 					key: "commentManage"
 				}
 			},
