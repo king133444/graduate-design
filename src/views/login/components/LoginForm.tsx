@@ -1,20 +1,43 @@
-import { useState } from "react";
-import { Button, Form, Input, Modal, Select, message } from "antd"; // 引入 Space 组件
+import { useEffect, useState } from "react";
+import { Button, Col, ConfigProvider, Form, Input, Modal, Row, Select, Tooltip, message } from "antd"; // 引入 Space 组件
 import { useLocation, useNavigate } from "react-router-dom";
 import { HOME_URL } from "@/config/config";
-import { UserOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
+import { TinyColor } from '@ctrl/tinycolor';
+import { UserOutlined, LockOutlined, UserAddOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import api from "@/api";
 
 interface LocationState {
   from?: string;
 }
-
+// const colors1 = ['#40e495', '#30dd8a', '#2bb673'];
+const colors2 = ['#6253E1', '#04BEFE'];
+const getHoverColors = (colors: string[]) =>
+  colors.map((color) => new TinyColor(color).lighten(5).toString());
+const getActiveColors = (colors: string[]) =>
+  colors.map((color) => new TinyColor(color).darken(5).toString());
 const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
   const [register, setRegister] = useState(false);
+  const [captchaImage, setCaptchaImage] = useState('');
+  const [captchaKey, setCaptchaKey] = useState('');
+  const [inputText, setInputText] = useState('');
+  const [timer, setTimer] = useState(58);  // 验证码有效期5分钟
+
+  // 获取图形验证码
+  const getCaptcha = async () => {
+    try {
+      const data: any = await api.GetCaptcha({});
+      const svgImage = `data:image/svg+xml;utf8,${encodeURIComponent(data.image)}`;
+      setCaptchaImage(svgImage);
+      setCaptchaKey(data.key);
+      setTimer(58);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // 登录
   const handleSubmit = async () => {
@@ -57,8 +80,11 @@ const LoginForm = () => {
         setLoading(true);
         const result: any = await api.Login({
           name: username,
-          password
+          password,
+          captchaKey: captchaKey,
+          captchaText: inputText,
         })
+
         const { success, data, message: info } = result
 
         if (success) {
@@ -85,7 +111,10 @@ const LoginForm = () => {
           }
           navigate(HOME_URL);
         } else {
-          message.error(info)
+          message.error(info);
+          // form.setFieldsValue([]);
+          setInputText('');
+          getCaptcha();
         }
       } catch (error: any) {
         console.log(error);
@@ -96,6 +125,20 @@ const LoginForm = () => {
       }
     }
   };
+
+  useEffect(() => {
+    getCaptcha();
+  }, []);
+
+  // 处理倒计时
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer]);
   return (
     <>
       <Form
@@ -129,29 +172,75 @@ const LoginForm = () => {
         >
           <Input.Password autoComplete="new-password" placeholder="请输入密码" prefix={<LockOutlined rev={undefined} />} />
         </Form.Item>
-        <Form.Item>
-          <br />
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-            icon={<UserOutlined rev={undefined} />}
-            style={{ width: '16vw', marginTop: '2vh' }}
-          >
-            登录
-          </Button>
-          <br />
-          <Button
-            type="text"
-            onClick={() => {
-              setRegister(true);
-            }}
-            style={{ marginLeft: '5vw', marginTop: '2vh' }}
-            icon={<UserAddOutlined rev={undefined} />}
-          >
-            注册
-          </Button>
+        <Form.Item
+        >
+          <Row style={{ marginTop: '30px' }} gutter={18}>
+            <Col>
+              <img alt="Captcha"
+                onClick={getCaptcha}
+                src={captchaImage}
+                style={{ width: '100px', borderRadius: '5px' }} />
+              {!(timer > 0) &&
+                <div style={{ color: 'red' }}>验证码已过期，请点击刷新</div>
+              }
+            </Col>
+            <Col>
+              <Input
+                size="middle"
+                prefix={
+                  <Tooltip title="请输入图形验证码">
+                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} rev={undefined} />
+                  </Tooltip>
+                }
+                value={inputText}
+                onChange={e => setInputText(e.target.value)}
+                placeholder="请输入图形验证码"
+
+              />
+            </Col>
+          </Row>
         </Form.Item>
+
+        <br />
+        <Row gutter={32} justify={'space-evenly'}>
+          <Col>
+
+            <Button
+              type="link"
+              size="large"
+              onClick={() => {
+                setRegister(true);
+              }}
+              icon={<UserAddOutlined rev={undefined} />}
+            >
+              注册
+            </Button>
+          </Col>
+          <Col>
+            <ConfigProvider
+              theme={{
+                components: {
+                  Button: {
+                    colorPrimary: `linear-gradient(116deg,  ${colors2.join(', ')})`,
+                    colorPrimaryHover: `linear-gradient(116deg, ${getHoverColors(colors2).join(', ')})`,
+                    colorPrimaryActive: `linear-gradient(116deg, ${getActiveColors(colors2).join(', ')})`,
+                    lineWidth: 0,
+                  },
+                },
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                icon={<UserOutlined rev={undefined} />}
+                size="large"
+              >
+                登录
+              </Button>
+            </ConfigProvider>
+          </Col>
+        </Row>
       </Form>
       <Modal
         open={register}

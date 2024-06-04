@@ -20,6 +20,10 @@ export default {
 	UpdatePassword: (params: any) => {
 		return fetchPost('/auth/changePassword', params);
 	},
+	// 获取图形验证码
+	GetCaptcha: (params: any) => {
+		return fetchGet('/captcha', params);
+	},
 	/**
 	 * 用户相关接口
 	 */
